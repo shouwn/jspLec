@@ -7,17 +7,17 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<table border = 1>
-	<%
-		for(int i = 1; i <= 9; i++){
-			out.println("\t<tr>");
-			for(int k = 2; k <= 9; k++){
-				out.println("\t\t<td>" + k + " x " + i + " = " + i * k + "</td>");
-			}
-			out.println("\t</tr>");
-		}
-	%>
+
+	<table>
+	<%for(int i = 2; i < 10; i++){ %>
+		<td>
+			<%for(int j = 1; j < 10; j++){ %>
+				
+			<%} %>
+		</td>
+	<%} %>	
 	</table>
-	
+
+
 </body>
 </html>
