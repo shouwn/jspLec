@@ -1,16 +1,42 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, lecture1.jdbc1.*"%>
+<%@ page import="java.util.*, lecture1.jdbc2.*"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="my"%>
 <%
+int currentPage = 1;
+int pageSize = 10;
+
+int i = 0;
+
+String pg = request.getParameter("pg");
+if (pg != null) currentPage = Integer.parseInt(pg);
+
 String s = request.getParameter("departmentId");
 int departmentId = (s == null) ? 0 : Integer.parseInt(s);
 s = request.getParameter("srchText");
 String srchText = (s == null) ? "" : s;
 s = null;
 
+List<String> userType = UserDAO.findAllUserType();
+List<String> checkedType = new ArrayList<>();
+
+for(; i < userType.size(); i++){
+	String check = request.getParameter("checkbox"+i);
+	if(check != null)
+		checkedType.add(check);
+}
+i = 0;
+
 List<User> list;
-if (departmentId == 0 && srchText.isEmpty()) list = UserDAO.findAll();
-else list = UserDAO.findBy(srchText, departmentId);
+int recordCount;
+if (departmentId == 0 && srchText.isEmpty()) {
+	list = UserDAO.findAll(currentPage, pageSize, checkedType);
+	recordCount = UserDAO.count(checkedType);
+} else {
+	list = UserDAO.findBy(srchText, departmentId, currentPage, pageSize, checkedType);
+	recordCount = UserDAO.count(srchText, departmentId, checkedType);
+}
+
 %>
 <!DOCTYPE html>
 <html>
@@ -24,23 +50,26 @@ else list = UserDAO.findBy(srchText, departmentId);
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
+body {
+	font-family: 굴림체;
+}
+
 thead th {
 	background-color: #eee;
 }
 
 table.table {
 	width: 700px;
-	margin-top: 10px;
 }
 </style>
 </head>
 <body>
 
 	<div class="container">
-
 		<h1>유저목록</h1>
 
 		<form class="form-inline">
+		
 			<div class="form-group">
 				<label>이름</label> <input type="text" class="form-control"
 					name="srchText" value="<%= srchText %>" placeholder="검색조건" />
@@ -57,6 +86,16 @@ table.table {
 					<% } %>
 				</select>
 			</div>
+			
+			<div class="checkbox">
+				<% for(String type : userType) {%>
+				<label> <input type="checkbox" name="checkbox<%= i++ %>" value="<%= type %>"
+					<%= checkedType.contains(type) ? "checked" : "" %>/> <%= type %> 
+				</label>
+				
+				<% } %>
+			</div>
+			
 			<button type="submit" class="btn btn-primary">조회</button>
 		</form>
 
@@ -82,6 +121,9 @@ table.table {
 				<% } %>
 			</tbody>
 		</table>
+
+		<my:pagination pageSize="<%= pageSize %>"
+			recordCount="<%= recordCount %>" queryStringName="pg" />
 
 	</div>
 </body>

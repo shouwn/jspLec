@@ -1,7 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, lecture1.jdbc1.*"%>
+<%@ page import="java.util.*, lecture1.jdbc2.*"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="my"%>
 <%
+int currentPage = 1;
+int pageSize = 10;
+
+String pg = request.getParameter("pg");
+if (pg != null) currentPage = Integer.parseInt(pg);
+
 String s = request.getParameter("departmentId");
 int departmentId = (s == null) ? 0 : Integer.parseInt(s);
 s = request.getParameter("srchText");
@@ -9,8 +16,15 @@ String srchText = (s == null) ? "" : s;
 s = null;
 
 List<User> list;
-if (departmentId == 0 && srchText.isEmpty()) list = UserDAO.findAll();
-else list = UserDAO.findBy(srchText, departmentId);
+int recordCount;
+if (departmentId == 0 && srchText.isEmpty()) {
+	list = UserDAO.findAll(currentPage, pageSize);
+	recordCount = UserDAO.count();
+} else {
+	list = UserDAO.findBy(srchText, departmentId, currentPage, pageSize);
+	recordCount = UserDAO.count(srchText, departmentId);
+}
+
 %>
 <!DOCTYPE html>
 <html>
@@ -24,20 +38,22 @@ else list = UserDAO.findBy(srchText, departmentId);
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
+body {
+	font-family: 굴림체;
+}
+
 thead th {
 	background-color: #eee;
 }
 
 table.table {
 	width: 700px;
-	margin-top: 10px;
 }
 </style>
 </head>
 <body>
 
 	<div class="container">
-
 		<h1>유저목록</h1>
 
 		<form class="form-inline">
@@ -82,6 +98,9 @@ table.table {
 				<% } %>
 			</tbody>
 		</table>
+
+		<my:pagination pageSize="<%= pageSize %>"
+			recordCount="<%= recordCount %>" queryStringName="pg" />
 
 	</div>
 </body>
