@@ -244,7 +244,7 @@ public class UserDAO {
 		if(!checkedType.isEmpty()){
 			temp.append("AND userType IN (");
 			for(String s : checkedType)
-				temp.append('\'').append(s).append('\'').append(",");
+				temp.append("\' ").append("?").append(" \'").append(",");
 			temp.replace(temp.length() - 1, temp.length(), ") ");
 		}
 		
@@ -256,6 +256,9 @@ public class UserDAO {
 			statement.setString(i++, name + "%");
 			if(departmentId != 0) statement.setInt(i++, departmentId);
 
+			for(String s : checkedType)
+				statement.setString(i++, s);
+			
 			statement.setInt(i++, (currentPage - 1) * pageSize);
 			statement.setInt(i++, pageSize);
 
