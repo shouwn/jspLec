@@ -28,7 +28,7 @@ List<Student> list = StudentDAO2.findByName(srchText);
   <div class="form-group">
     <label>이름</label>
     <input type="text" class="form-control" name="srchText" value="<%= srchText %>" 
-           placeholder="검색조건" />
+           placeholder="검색조건<%= Thread.currentThread().getName() %>" />
   </div>
   <button type="submit" class="btn btn-primary">조회</button>
 </form>
