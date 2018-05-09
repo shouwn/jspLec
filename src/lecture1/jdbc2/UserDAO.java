@@ -1,5 +1,5 @@
 package lecture1.jdbc2;
-
+ 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +12,7 @@ import javax.naming.NamingException;
 import lecture1.DB;
 
 public class UserDAO {
-
+ 
 	public static User createUser(ResultSet resultSet) throws SQLException{
 		User user = new User();
 		user.setUserid(resultSet.getString("userid"));

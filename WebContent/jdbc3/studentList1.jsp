@@ -1,9 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, lecture1.jdbc1.*" %>
+<%@ page import="java.util.*, lecture1.jdbc3.*" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%
-String srchText = request.getParameter("srchText");
-if (srchText == null) srchText = "";
-List<Student> list = StudentDAO2.findByName(srchText);
+int currentPage = 1;
+int pageSize = 10;
+
+String pg = request.getParameter("pg");
+if (pg != null) currentPage = Integer.parseInt(pg);
+
+List<Student> list = StudentDAO.findAll(currentPage, pageSize);
+int recordCount = StudentDAO.count();
 %>
 <!DOCTYPE html>
 <html>
@@ -14,28 +20,21 @@ List<Student> list = StudentDAO2.findByName(srchText);
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
+      body { font-family: 굴림체; }
       thead th { background-color: #eee; }
-      table.table { width: 700px; margin-top: 10px; }
+      table.table { width: 700px; }
+      tr:hover td { background-color: #ffe; cursor: pointer; }
   </style>
 </head>
 <body>
 
 <div class="container">
-
 <h1>학생목록</h1>
-
-<form class="form-inline">
-  <div class="form-group">
-    <label>이름</label>
-    <input type="text" class="form-control" name="srchText" value="<%= srchText %>" 
-           placeholder="검색조건<%= Thread.currentThread().getName() %>" />
-  </div>
-  <button type="submit" class="btn btn-primary">조회</button>
-</form>
 
 <table class="table table-bordered table-condensed">
     <thead>
         <tr>
+            <th>id</th>
             <th>학번</th>
             <th>이름</th>
             <th>학과</th>
@@ -44,7 +43,8 @@ List<Student> list = StudentDAO2.findByName(srchText);
     </thead>
     <tbody>
         <% for (Student student : list) { %>
-            <tr>
+            <tr data-url="studentEdit1.jsp?id=<%= student.getId() %>&pg=<%= currentPage %>">
+                <td><%= student.getId() %></td>
                 <td><%= student.getStudentNumber() %></td>
                 <td><%= student.getName() %></td>
                 <td><%= student.getDepartmentName() %></td>
@@ -54,7 +54,14 @@ List<Student> list = StudentDAO2.findByName(srchText);
     </tbody>
 </table>
 
+<my:pagination pageSize="<%= pageSize %>" recordCount="<%= recordCount %>" queryStringName="pg" />
+
 </div>
+<script>
+$("[data-url]").click(function() {
+	var url = $(this).attr("data-url");
+	location.href = url;
+})
+</script>
 </body>
 </html>
->
