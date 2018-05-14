@@ -28,7 +28,7 @@ if (request.getMethod().equals("GET")) {
         에러메시지 = "학번을 입력하세요";
     else if (student.getName() == null || student.getName().length() == 0) 
         에러메시지 = "이름을 입력하세요";
-    else if (s3 == null || s3.length() == 0) 
+    else if (student.getYear() == 0) 
         에러메시지 = "학년을 입력하세요";
     else {
         StudentDAO.insert(student);
