@@ -12,32 +12,38 @@ String srchText = request.getParameter("srchText");
 if (srchText == null) srchText = "";
 String srchTextEncoded = URLEncoder.encode(srchText, "UTF-8");
 
-Student student = null;
+User user = null;
 
 if (request.getMethod().equals("GET")) {
-    student = StudentDAO.findOne(id);
+    user = UserDAO.findOne(id);
 }
 else {
-    student = new Student();
-    student.setId(id);
-    student.setStudentNumber(request.getParameter("studentNumber"));
-    student.setName(request.getParameter("studentName"));
+    user = new User();
+    user.setId(id);
+    user.setUserid(request.getParameter("userid"));
+    user.setName(request.getParameter("userName"));
+    user.setEmail(request.getParameter("userEmail"));
     String s2 = request.getParameter("departmentId");
-    student.setDepartmentId(ParseUtils.parseInt(s2, 1));
-    String s3 = request.getParameter("year");
-    student.setYear(ParseUtils.parseInt(s3, 0));
+    user.setDepartmentId(ParseUtils.parseInt(s2, -1));
+    String s3 = request.getParameter("userEnabled");
+    user.setEnabled("true".equals(s3) ? true : false); 
+    user.setUserType(request.getParameter("userType"));
     
     if (s1 == null || s1.length() == 0) 
         에러메시지 = "ID를 입력하세요";
-    else if (student.getStudentNumber() == null || student.getStudentNumber().length() == 0) 
-        에러메시지 = "학번을 입력하세요";
-    else if (student.getName() == null || student.getName().length() == 0) 
+    else if (user.getUserid() == null || user.getUserid().length() == 0) 
+        에러메시지 = "유저 아이디를 입력하세요";
+    else if (user.getName() == null || user.getName().length() == 0) 
         에러메시지 = "이름을 입력하세요";
-    else if (s3 == null || s3.length() == 0) 
-        에러메시지 = "학년을 입력하세요";
+    else if (user.getEmail() == null || user.getEmail().length() == 0) 
+        에러메시지 = "이메일을 입력하세요";
+    else if (user.getDepartmentId() == -1)
+        에러메시지 = "학과를 선택하세요";
+    else if (s3 == null) 
+        에러메시지 = "enabled를 입력하세요";
     else {
-        StudentDAO.update(student);
-        response.sendRedirect("studentList1.jsp?pg=" + pg + "&srchText=" + srchTextEncoded);
+        UserDAO.update(user);
+        response.sendRedirect("userList1.jsp?pg=" + pg + "&srchText=" + srchTextEncoded);
         return;
     }
 }
@@ -59,12 +65,12 @@ else {
 
 <div class="container">
 
-<h1>학생 등록</h1>
+<h1>유저 등록</h1>
 <hr />
 
 <form method="post">
   <div class="form-group">
-    <label>학번</label>
+    <label></label>
     <input type="text" class="form-control" name="studentNumber" 
            value="<%= student.getStudentNumber() %>" />
   </div>

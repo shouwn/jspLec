@@ -13,12 +13,12 @@ String srchText = request.getParameter("srchText");
 if (srchText == null) srchText = "";
 String srchTextEncoded = URLEncoder.encode(srchText, "UTF-8");
 
-int recordCount = StudentDAO.count(srchText);
+int recordCount = UserDAO.count(srchText);
 
 int lastPage = (recordCount + pageSize - 1) / pageSize;
 if (currentPage > lastPage) currentPage = lastPage;
 
-List<Student> list = StudentDAO.findByName(srchText, currentPage, pageSize);
+List<User> list = UserDAO.findByUserId(srchText, currentPage, pageSize);
 %>
 <!DOCTYPE html>
 <html>
@@ -37,11 +37,11 @@ List<Student> list = StudentDAO.findByName(srchText, currentPage, pageSize);
 </head>
 <body>
 <div class="container">
-<h1>학생목록</h1>
+<h1>유저목록</h1>
 
 <a id="createButton" class="btn btn-primary pull-right" 
    href="studentCreate1.jsp?pg=<%=currentPage%>&srchText=<%=srchTextEncoded%>">
-  <i class="glyphicon glyphicon-plus"></i> 학생 등록
+  <i class="glyphicon glyphicon-plus"></i> 유저 등록
 </a>
 
 <form class="form-inline">
@@ -57,20 +57,24 @@ List<Student> list = StudentDAO.findByName(srchText, currentPage, pageSize);
   <thead>
     <tr>
       <th>id</th>
-      <th>학번</th>
+      <th>유저 아이디</th>
       <th>이름</th>
+      <th>이메일</th>
       <th>학과</th>
-      <th>학년</th>
+      <th>enabled</th>
+      <th>유저 타입</th>
     </tr>
   </thead>
   <tbody>
-    <% for (Student student : list) { %>
-      <tr data-url="studentEdit1.jsp?id=<%=student.getId()%>&pg=<%=currentPage%>&srchText=<%=srchTextEncoded%>">
-        <td><%= student.getId() %></td>
-        <td><%= student.getStudentNumber() %></td>
-        <td><%= student.getName() %></td>
-        <td><%= student.getDepartmentName() %></td>
-        <td><%= student.getYear() %></td>
+    <% for (User user : list) { %>
+      <tr data-url="userEdit1.jsp?id=<%=user.getId()%>&pg=<%=currentPage%>&srchText=<%=srchTextEncoded%>">
+        <td><%= user.getId() %></td>
+        <td><%= user.getUserid() %></td>
+        <td><%= user.getName() %></td>
+        <td><%= user.getEmail() %></td>
+        <td><%= user.getDepartmentName() %></td>
+        <td><%= user.isEnabled() ? "true" : "false"%></td>
+        <td><%= user.getUserType() %></td>
       </tr>
     <% } %>
   </tbody>
