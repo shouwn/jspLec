@@ -30,19 +30,12 @@ if (request.getMethod().equals("GET")) {
     String s3 = request.getParameter("userEnabled");
     user.setEnabled("true".equals(s3));
     user.setUserType(request.getParameter("userType"));
-    
-    if (user.getUserid() == null || user.getUserid().length() == 0) 
-        에러메시지 = "유저 아이디를 입력하세요";
-    else if (user.getName() == null || user.getName().length() == 0) 
-        에러메시지 = "이름을 입력하세요";
-    else if (user.getPassword() == null || user.getPassword().length() == 0) 
-        에러메시지 = "비밀번호를 입력하세요";
-    else if (user.getEmail() == null || user.getEmail().length() == 0) 
-        에러메시지 = "이메일을 입력하세요";
-    else if (user.getDepartmentId() == -1)
-        에러메시지 = "학과를 선택하세요";
-    else if (user.getUserType() == null || user.getUserType().length() == 0) 
-        에러메시지 = "사용자 타입을 입력하세요.";
+    MyError error = new UserError(user, 
+    		UserError.USERID, UserError.NAME, UserError.PASSWORD, UserError.EMAIL, 
+    		UserError.DEPARTMENTID, UserError.USERTYPE);
+    		
+	if(error.isError())
+		에러메시지 = error.getErrorMessage();
     else {
         UserDAO.insert(user);
         response.sendRedirect("userList1.jsp?pg=99999");
@@ -77,12 +70,12 @@ if (request.getMethod().equals("GET")) {
            value="<%= user.getUserid() %>" />
   </div>
   <div class="form-group">
-    <label>비밀번호</label>
-    <input type="text" class="form-control" name="userPassword" value="<%= user.getName() %>" />
-  </div>
-  <div class="form-group">
     <label>이름</label>
     <input type="text" class="form-control" name="userName" value="<%= user.getName() %>" />
+  </div>
+  <div class="form-group">
+    <label>비밀번호</label>
+    <input type="text" class="form-control" name="userPassword" value="<%= user.getPassword() %>" />
   </div>
   <div class="form-group">
     <label>이메일</label>
