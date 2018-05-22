@@ -53,7 +53,18 @@ public class UserError implements MyError{
 			errorMessage = "유저 아이디를 입력하세요";
 			return true;
 		}
+		
+		try {
+			if(UserDAO.findUserId(user.getUserid()).size() != 0) {
+				errorMessage = "이미 있는 아이디입니다.";
+				return true;
+			}
 
+		} catch (Exception e) {
+			errorMessage = "다시 시도해 주세요.";
+			return true;
+		}
+		
 		return false;
 	}
 

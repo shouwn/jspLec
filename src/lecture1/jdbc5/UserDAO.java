@@ -16,13 +16,39 @@ public class UserDAO {
 	public static List<User> findByUserId(String userId, int currentPage, int pageSize) throws Exception {
 		String sql = "SELECT u.*, d.departmentName" +
 				" FROM user u LEFT JOIN department d ON u.departmentId = d.id" +
-				" WHERE name LIKE ?" +
+				" WHERE userid LIKE ?" +
 				" LIMIT ?, ?";
 		try (Connection connection = DB.getConnection("student1");
 				PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, userId + "%");
 			statement.setInt(2, (currentPage - 1) * pageSize);
 			statement.setInt(3, pageSize);
+			try (ResultSet resultSet = statement.executeQuery()) {
+				ArrayList<User> list = new ArrayList<>();
+				while (resultSet.next()) {
+					User user = new User();
+					user.setId(resultSet.getInt("id"));
+					user.setUserid(resultSet.getString("userid"));
+					user.setName(resultSet.getString("name"));
+					user.setEmail(resultSet.getString("email"));
+					user.setDepartmentName(resultSet.getString("departmentName"));
+					user.setDepartmentId(resultSet.getInt("departmentId"));
+					user.setEnabled(resultSet.getBoolean("enabled"));
+					user.setUserType(resultSet.getString("userType"));
+					list.add(user);
+				}
+				return list;
+			}
+		}
+	}
+	
+	public static List<User> findUserId(String userId) throws SQLException, NamingException{
+		String sql = "SELECT u.*, d.departmentName" +
+				" FROM user u LEFT JOIN department d ON u.departmentId = d.id" +
+				" WHERE userid LIKE ?";
+		try (Connection connection = DB.getConnection("student1");
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setString(1, userId + "%");
 			try (ResultSet resultSet = statement.executeQuery()) {
 				ArrayList<User> list = new ArrayList<>();
 				while (resultSet.next()) {
