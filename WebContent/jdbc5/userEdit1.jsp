@@ -40,7 +40,7 @@ else {
     else if (user.getDepartmentId() == -1)
         에러메시지 = "학과를 선택하세요";
     else if (user.getUserType() == null || user.getUserType().length() == 0) 
-        에러메시지 = "이메일을 입력하세요";
+        에러메시지 = "사용자 타입을 입력하세요.";
     else {
         UserDAO.update(user);
         response.sendRedirect("userList1.jsp?pg=" + pg + "&srchText=" + srchTextEncoded);

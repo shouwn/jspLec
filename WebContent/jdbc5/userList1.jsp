@@ -40,7 +40,7 @@ List<User> list = UserDAO.findByUserId(srchText, currentPage, pageSize);
 <h1>유저목록</h1>
 
 <a id="createButton" class="btn btn-primary pull-right" 
-   href="studentCreate1.jsp?pg=<%=currentPage%>&srchText=<%=srchTextEncoded%>">
+   href="userCreate1.jsp?pg=<%=currentPage%>&srchText=<%=srchTextEncoded%>">
   <i class="glyphicon glyphicon-plus"></i> 유저 등록
 </a>
 
