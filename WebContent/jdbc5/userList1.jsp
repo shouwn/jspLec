@@ -17,6 +17,7 @@ int recordCount = UserDAO.count(srchText);
 
 int lastPage = (recordCount + pageSize - 1) / pageSize;
 if (currentPage > lastPage) currentPage = lastPage;
+if(lastPage == 0) currentPage = 1;
 
 List<User> list = UserDAO.findByUserId(srchText, currentPage, pageSize);
 %>
@@ -46,7 +47,7 @@ List<User> list = UserDAO.findByUserId(srchText, currentPage, pageSize);
 
 <form class="form-inline">
   <div class="form-group">
-    <label>이름</label>
+    <label>유저 아이디</label>
     <input type="text" class="form-control" name="srchText" value="<%= srchText %>" 
            placeholder="검색조건" />
   </div>

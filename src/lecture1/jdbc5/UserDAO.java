@@ -13,16 +13,18 @@ import lecture1.DB;
 
 public class UserDAO {
 
-	public static List<User> findByUserId(String userId, int currentPage, int pageSize) throws Exception {
+	public static List<User> findByUserId(String userId, int currentPage, int pageSize) throws SQLException, NamingException {
 		String sql = "SELECT u.*, d.departmentName" +
 				" FROM user u LEFT JOIN department d ON u.departmentId = d.id" +
-				" WHERE userid LIKE ?" +
+				" WHERE u.userid LIKE ?" +
 				" LIMIT ?, ?";
 		try (Connection connection = DB.getConnection("student1");
 				PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setString(1, userId + "%");
 			statement.setInt(2, (currentPage - 1) * pageSize);
 			statement.setInt(3, pageSize);
+			System.out.println("currentPage: " + currentPage + " pageSize: " + pageSize);
+			System.out.println(statement);
 			try (ResultSet resultSet = statement.executeQuery()) {
 				ArrayList<User> list = new ArrayList<>();
 				while (resultSet.next()) {
@@ -68,11 +70,11 @@ public class UserDAO {
 		}
 	}
 
-	public static int count(String name) throws Exception {
-		String sql = "SELECT COUNT(*) FROM user WHERE name LIKE ?";
+	public static int count(String userid) throws Exception {
+		String sql = "SELECT COUNT(*) FROM user WHERE userid LIKE ?";
 		try (Connection connection = DB.getConnection("student1");
 				PreparedStatement statement = connection.prepareStatement(sql)) {
-			statement.setString(1, name + "%");
+			statement.setString(1, userid + "%");
 			try (ResultSet resultSet = statement.executeQuery()) {
 				if (resultSet.next())
 					return resultSet.getInt(1);
