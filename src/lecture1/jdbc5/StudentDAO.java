@@ -3,14 +3,17 @@ package lecture1.jdbc5;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.naming.NamingException;
 
 import lecture1.DB;
 
 public class StudentDAO {
 
-    public static List<Student> findByName(String name, int currentPage, int pageSize) throws Exception {
+    public static List<Student> findByName(String name, int currentPage, int pageSize) throws SQLException, NamingException {
         String sql = "SELECT s.*, d.departmentName" +
                      " FROM student s LEFT JOIN department d ON s.departmentId = d.id" +
                      " WHERE name LIKE ?" +

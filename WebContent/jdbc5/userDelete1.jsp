@@ -8,6 +8,6 @@ String srchText = request.getParameter("srchText");
 if (srchText == null) srchText = "";
 String srchTextEncoded = URLEncoder.encode(srchText, "UTF-8");
 
-StudentDAO.delete(id);
-response.sendRedirect("studentList1.jsp?pg=" + pg + "&srchText=" + srchTextEncoded);
+UserDAO.delete(id);
+response.sendRedirect("userList1.jsp?pg=" + pg + "&srchText=" + srchTextEncoded);
 %>

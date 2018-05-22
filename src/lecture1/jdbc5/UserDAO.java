@@ -3,8 +3,11 @@ package lecture1.jdbc5;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.naming.NamingException;
 
 import lecture1.DB;
 
@@ -74,9 +77,9 @@ public class UserDAO {
 		}
 	}
 
-	public static void update(User user) throws Exception {
-		String sql = "UPDATE user " +
-				"SET userid=?, name=?, email=?, departmentId=? enabled=? userType=? " +
+	public static void update(User user) throws SQLException, NamingException {
+		String sql = "UPDATE user SET " +
+				"userid=?, name=?, email=?, departmentId=?, enabled=?, userType=? " +
 				"WHERE id = ? ";
 		try (Connection connection = DB.getConnection("student1");
 				PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -115,4 +118,19 @@ public class UserDAO {
 			statement.executeUpdate();
 		}
 	}
+
+	public static List<String> findUserType() throws SQLException, NamingException{
+		String sql = "SELECT DISTINCT userType FROM user";
+		try (Connection connection = DB.getConnection("student1");
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = statement.executeQuery()) {
+				List<String> list = new ArrayList<>();
+				while (resultSet.next()) {
+					list.add(resultSet.getString("userType"));
+				}
+				return list;
+			}
+		}
+	}
+
 }

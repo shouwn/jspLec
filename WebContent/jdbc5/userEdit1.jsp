@@ -26,7 +26,7 @@ else {
     String s2 = request.getParameter("departmentId");
     user.setDepartmentId(ParseUtils.parseInt(s2, -1));
     String s3 = request.getParameter("userEnabled");
-    user.setEnabled("true".equals(s3) ? true : false); 
+    user.setEnabled("true".equals(s3));
     user.setUserType(request.getParameter("userType"));
     
     if (s1 == null || s1.length() == 0) 
@@ -39,8 +39,8 @@ else {
         에러메시지 = "이메일을 입력하세요";
     else if (user.getDepartmentId() == -1)
         에러메시지 = "학과를 선택하세요";
-    else if (s3 == null) 
-        에러메시지 = "enabled를 입력하세요";
+    else if (user.getUserType() == null || user.getUserType().length() == 0) 
+        에러메시지 = "이메일을 입력하세요";
     else {
         UserDAO.update(user);
         response.sendRedirect("userList1.jsp?pg=" + pg + "&srchText=" + srchTextEncoded);
@@ -70,37 +70,53 @@ else {
 
 <form method="post">
   <div class="form-group">
-    <label></label>
-    <input type="text" class="form-control" name="studentNumber" 
-           value="<%= student.getStudentNumber() %>" />
+    <label>유저 아이디</label>
+    <input type="text" class="form-control" name="userid" 
+           value="<%= user.getUserid() %>" />
   </div>
   <div class="form-group">
     <label>이름</label>
-    <input type="text" class="form-control" name="studentName" value="<%= student.getName() %>" />
+    <input type="text" class="form-control" name="userName" value="<%= user.getName() %>" />
+  </div>
+  <div class="form-group">
+    <label>이메일</label>
+    <input type="text" class="form-control" name="userEmail" value="<%= user.getEmail() %>" />
   </div>
   <div class="form-group">
     <label>학과</label>
     <select class="form-control" name="departmentId">
       <% for (Department d : DepartmentDAO.findAll()) { %>
-          <% String selected = student.getDepartmentId()==d.getId() ? "selected" : ""; %>
+          <% String selected = user.getDepartmentId()==d.getId() ? "selected" : ""; %>
           <option value="<%= d.getId() %>" <%= selected %>>
             <%= d.getDepartmentName() %>
           </option>
       <% } %>
     </select>
   </div>
+  <div class="checkbox">
+    <label>
+    	<input type="checkbox" name="userEnabled" value="true" <%= user.isEnabled() ? "checked" : "" %> /> enabled
+    </label>
+  </div>
   <div class="form-group">
-    <label>학년</label>
-    <input type="number" class="form-control" name="year" value="<%= student.getYear() %>" />
+    <label>사용자 타입</label><br/>
+    <div class="radio">
+    <%for(String type : UserDAO.findUserType()) {%>
+    <label>
+    	<input type="radio" name="userType" value="<%= type %>" <%= type.equals(user.getUserType()) ? "checked" : ""%> />
+    	<%= type %>
+    </label>
+    <%} %>
+    </div>
   </div>
   <button type="submit" class="btn btn-primary">
     <i class="glyphicon glyphicon-ok"></i> 저장
   </button>
-  <a href="studentDelete1.jsp?id=<%= id %>&pg=<%= pg %>&srchText=<%= srchTextEncoded %>" 
+  <a href="userDelete1.jsp?id=<%= id %>&pg=<%= pg %>&srchText=<%= srchTextEncoded %>" 
      class="btn btn-danger" onclick="return confirm('삭제하시겠습니까?')">
     <i class="glyphicon glyphicon-trash"></i> 삭제
   </a>
-  <a href="studentList1.jsp?pg=<%= pg %>&srchText=<%= srchTextEncoded %>" 
+  <a href="userList1.jsp?pg=<%= pg %>&srchText=<%= srchTextEncoded %>" 
      class="btn btn-default">
     <i class="glyphicon glyphicon-list"></i> 목록으로
   </a>
