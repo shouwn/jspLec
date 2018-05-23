@@ -35,7 +35,8 @@ List<Student> list = StudentDAO.findAll(currentPage, pageSize, ss, st, od);
   <style>
       body { font-family: 굴림체; }
       thead th { background-color: #eee; }
-      tr:hover td { background-color: #ffe; cursor: pointer; }
+      tr th:hover { background-color: #87d5ff; cursor: pointer; }
+      tr:hover { background-color: #ffe; cursor: pointer; }
       table.table { margin-top: 5px; }
       select[name=od] { margin-right: 20px; }
   </style>
@@ -70,11 +71,11 @@ List<Student> list = StudentDAO.findAll(currentPage, pageSize, ss, st, od);
 <table class="table table-bordered table-condensed">
   <thead>
     <tr>
-      <th>id</th>
+      <th >id</th>
       <th>학번</th>
       <th>이름</th>
-      <th>학과</th>
-      <th>학년</th>
+      <th data-url="studentList1.jsp?ss=<%=ss%>&st=<%=stEncoded%>&od=1">학과</th>
+      <th data-url="studentList1.jsp?ss=<%=ss%>&st=<%=stEncoded%>&od=2">학년</th>
     </tr>
   </thead>
   <tbody>

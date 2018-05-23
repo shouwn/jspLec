@@ -3,8 +3,11 @@ package lecture1.jdbc7;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.naming.NamingException;
 
 import lecture1.DB;
 
@@ -37,7 +40,7 @@ public class StudentDAO {
         }
     }
 
-    public static int count(String ss, String st) throws Exception {
+    public static int count(String ss, String st) throws SQLException, NamingException  {
         String sql = "call student_count(?, ?)";
         try (Connection connection = DB.getConnection("student1");
              PreparedStatement statement = connection.prepareStatement(sql)) {
