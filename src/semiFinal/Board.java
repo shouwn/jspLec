@@ -1,4 +1,4 @@
-package p201332017;
+package semiFinal;
 
 public class Board {
 	int id;

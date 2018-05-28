@@ -1,4 +1,4 @@
-package p201332017;
+package semiFinal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,19 +9,19 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
-public class BoardDAO {
-    public static List<Board> findAll() throws SQLException, NamingException 
+public class UserDAO {
+    public static List<User> findAll() throws SQLException, NamingException 
     {
-        String sql = "SELECT * FROM board";
+        String sql = "SELECT * FROM user";
         try (Connection connection = DB.getConnection("bbs2");
              PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
-                ArrayList<Board> list = new ArrayList<Board>();
+                ArrayList<User> list = new ArrayList<User>();
                 while (resultSet.next()) {
-                	Board board = new Board();
-					board.setId(resultSet.getInt("id"));
-					board.setBoardName(resultSet.getString("boardName"));
-					list.add(board);
+					User user = new User();
+					user.setId(resultSet.getInt("id"));
+					user.setName(resultSet.getString("name"));
+					list.add(user);
                 }
                 return list;
             }
