@@ -119,7 +119,7 @@ else {
      class="btn btn-danger" onclick="return confirm('삭제하시겠습니까?')">
     <i class="glyphicon glyphicon-trash"></i> 삭제
   </a>
-  <a href="studentList1.jsp?pg=<%= pg %>&ss=<%= ss %>&st=<%=stEncoded%>&od=<%=od%>" 
+  <a href="userList1.jsp?pg=<%= pg %>&ss=<%= ss %>&st=<%=stEncoded%>&od=<%=od%>" 
      class="btn btn-default">
     <i class="glyphicon glyphicon-list"></i> 목록으로
   </a>
