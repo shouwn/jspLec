@@ -67,8 +67,10 @@ List<User> list = UserDAO.findByUserId(srchText, currentPage, pageSize);
     </tr>
   </thead>
   <tbody>
+    <% int i = 0; %>
     <% for (User user : list) { %>
-      <tr data-url="userEdit1.jsp?id=<%=user.getId()%>&pg=<%=currentPage%>&srchText=<%=srchTextEncoded%>">
+      <tr style = "background:<%= i++ % 2 == 0 ? "#ccffcc" : "#ffffcc"%>" 
+      data-url="userEdit1.jsp?id=<%=user.getId()%>&pg=<%=currentPage%>&srchText=<%=srchTextEncoded%>">
         <td><%= user.getId() %></td>
         <td><%= user.getUserid() %></td>
         <td><%= user.getName() %></td>
